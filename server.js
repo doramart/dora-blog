@@ -5,15 +5,20 @@
 var http = require('http');
 var url = require('url');
 var actionResos = {};
+var session = require('./session');
 
-//handleResos['add'] = require('./actions/add');
-//handleResos['del'] = require('./actions/del');
-//handleResos['update'] = require('./actions/update');
+actionResos['/add'] = require('./actions/add');
+actionResos['/del'] = require('./actions/del');
+actionResos['/update'] = require('./actions/update');
+actionResos['/login'] = require('./actions/login');
+actionResos['/logout'] = require('./actions/logout');
 actionResos['/'] = require('./actions/index');
 
 
 
 http.createServer(function(request,response){
+    request.session = session(request,response);
+    response.writeHead('Content-Type','text/html');
     let pathname = url.parse(request.url).pathname;
     var action  = actionResos[pathname];
     if(action){

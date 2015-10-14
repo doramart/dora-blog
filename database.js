@@ -5,7 +5,7 @@ var fs = require('fs');
 const filepath = __dirname + '/data.json';
 var list;
 try{
-    list  = Json.parse(fs.readFileSync(filepath));
+    list  = JSON.parse(fs.readFileSync(filepath));
 }catch(e){
     list = []
 }
@@ -13,18 +13,22 @@ try{
 
 module.exports = {
     add(artice){
-        list.push(artice)
+        list.push(artice);
+        this.store();
     },
     del(index){
-        list.splice(index,1)
+        list.splice(index,1);
+        this.store();
     },
     update(index,newArticle){
-        list.splice(index,1,newArticle)
+        list.splice(index,1,newArticle);
+        this.store();
     },
     get list(){
         return list;
     },
-    store(){
-        fs.write(filepath,Json.stringify(list),callback)
+    store(callback){
+        callback = callback || function(){};
+        fs.writeFile(filepath,JSON.stringify(list),callback)
     }
 };
